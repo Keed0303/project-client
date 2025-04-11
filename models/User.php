@@ -8,12 +8,14 @@ switch($action) {
     $name = $_POST['name'] ?? '';
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-
-    // Simple validation
+  
     if ($name && $email && $password) {
+      // Hash the password before storing
+      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+  
       $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-      $result = $stmt->execute([$name, $email, $password]);
-
+      $result = $stmt->execute([$name, $email, $hashedPassword]);
+  
       echo json_encode([
         'success' => $result,
         'message' => $result ? 'User created successfully.' : 'Failed to create user.'

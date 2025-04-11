@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: ./login.php"); // Adjust path based on where your login page is
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,16 +16,15 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="./icon.png">
-
   <style>
     body {
       background-color: #f8fafc;
     }
 
     .sidebar {
-      height: 100vh;
       background-color: #071437;
       color: white;
+      width: 250px;
     }
 
     .sidebar .logo {
@@ -106,6 +113,52 @@
         display: block;
       }
     }
+
+    .keen-table-card {
+    border: none;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .keen-table-header {
+    background-color: #f5f8fa;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #eff2f5;
+  }
+
+  .keen-table-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: #181c32;
+  }
+
+  .keen-table th {
+    color: #7e8299;
+    font-weight: 600;
+    background-color: #f9f9f9;
+    font-size: 0.875rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #eff2f5;
+  }
+
+  .keen-table td {
+    font-size: 0.925rem;
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    color: #3f4254;
+    border-bottom: 1px solid #eff2f5;
+  }
+
+  .keen-table tbody tr:hover {
+    background-color: #f1faff;
+    transition: background 0.3s;
+  }
+
+  .keen-table-responsive {
+    overflow-x: auto;
+  }
+  
   </style>
 </head>
 
@@ -125,71 +178,66 @@
         </button>
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
           <h3>Dashboard</h3>
-          <div class="d-flex flex-wrap gap-2">
-            <input type="date" class="form-control">
-            <select class="form-select">
-              <option>All Accounts</option>
-            </select>
-            <select class="form-select">
-              <option>All Store/Branch</option>
-            </select>
-          </div>
         </div>
+          <div id="tableSection" class=" container-fluid p-4 bg-body-tertiary min-vh-100">
+            <div class="keen-table-card">
+              <div class="keen-table-header d-flex justify-content-between align-items-center">
+                <h5>Users List</h5>
+              </div>
+              <div class="keen-table-responsive">
+                <table id="userTable" class="table keen-table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-        <div class="row g-3">
-          <div class="col-md-4">
-            <div class="card p-3">
-              <h6>Total Sales Today</h6>
-              <h5>PHP 600.00</h5>
-              <small>Cash: PHP 600.00</small>
+                </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="card p-3">
-              <h6>Top Product Sales Today</h6>
-              <h5 class="text-primary">6 Sold</h5>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-3 text-center">
-              <h6>Customer Today</h6>
-              <h5 class="text-primary">1 Customers</h5>
-            </div>
-          </div>
-
-          <div class="col-md-8">
-            <div class="card p-3">
-              <h6>Peak Time Sales</h6>
-              <div class="chart-placeholder mt-2"></div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-3">
-              <h6>Top Flavors</h6>
-              <ul class="list-unstyled small">
-                <li class="text-primary">Very Hazelnut</li>
-                <li class="text-primary">Mango</li>
-                <li class="text-primary">Salted Caramel Vanilla</li>
-                <li class="text-primary">Mint & Chocolate</li>
-              </ul>
-              <div class="ring-chart mx-auto">33%</div>
-            </div>
-          </div>
-
-          <div class="col-12">
-            <div class="card p-3">
-              <h6>Daily Sales Performance</h6>
-              <p>Apr 09, 2025 Wednesday</p>
-              <p class="text-end">MTD Sales April 2025</p>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
   </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
+    $(document).ready(function() {
+      fetchUsers();
+    });
+
+
+    function fetchUsers() {
+      $.ajax({
+        url: './../models/User.php?action=fetch',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          if (data.success) {
+            let tableBody = '';
+            data.response.forEach(function(user) {
+              tableBody += `<tr data-crud-id="${user.id}">
+                                <td>${user.id}</td>
+                                <td>${user.name}</td>
+                                <td>${user.email}</td>
+                            </tr>`;
+            });
+            $('#userTable tbody').html(tableBody);
+          } else {
+            $('#userTable tbody').html('<tr><td colspan="4">No users found.</td></tr>');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX request failed:', error);
+        }
+      });
+    }
+
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('show');
       document.getElementById('sidebarOverlay').classList.toggle('show');

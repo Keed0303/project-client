@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php"); // Adjust path based on where your login page is
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,9 +23,14 @@
     }
 
     .sidebar {
-      height: 100vh;
       background-color: #071437;
       color: white;
+      width: 250px;
+      height: 100vh; /* Ensures full screen height */
+      position: fixed; /* Keeps it fixed on screen */
+      top: 0;
+      left: 0;
+      overflow-y: auto; /* Enables scrolling if content overflows */
     }
 
     .sidebar .logo {
@@ -40,7 +53,6 @@
     .sidebar a:hover {
       background-color: #3e97ff;
       border-radius: 10px;
-
     }
 
     .card {
@@ -75,6 +87,15 @@
       color: #0d6efd;
     }
 
+    /* Form section styling */
+    .form-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -103,6 +124,14 @@
       .overlay.show {
         display: block;
       }
+
+      #mainContent {
+        margin-left: 0;
+      }
+    }
+
+    #mainContent {
+      margin-left: 250px; /* Matches sidebar width */
     }
   </style>
 </head>
@@ -113,7 +142,6 @@
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-
       <?php include('./../../pages/components/sidebar.php') ?>
 
       <!-- Main Content -->
@@ -125,10 +153,31 @@
           <h3>User</h3>
         </div>
 
+        <!-- Create User Section -->
+        <div id="createSection" class="form-container" style="display: none;">
+          <h4>Create User</h4>
+          <form id="createForm">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create User</button>
+            <button type="button" class="btn btn-secondary" onclick="goBackToTable()">Cancel</button>
+          </form>
+        </div>
 
-        <div class="col mt-5">
-        <button class="btn btn-primary btn-sm mb-3 px-4 py-2" onclick="showCreateForm()">Create</button>
-          <div class="card ">
+        <!-- Users Table Section -->
+        <div id="tableSection">
+          <button class="btn btn-primary btn-sm mb-3 px-4 py-2" onclick="showCreateForm()">Create</button>
+          <div class="card">
             <div class="card-header text-white">
               <h5 class="mb-0">Users List</h5>
             </div>
@@ -140,10 +189,11 @@
                       <th scope="col">#</th>
                       <th scope="col">Name</th>
                       <th scope="col">Email</th>
+                      <th scope="col">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-
+                    <!-- User data will be loaded here -->
                   </tbody>
                 </table>
               </div>
@@ -151,71 +201,50 @@
           </div>
         </div>
 
+        <!-- View User Section -->
+        <div id="viewSection" class="form-container" style="display: none;">
+          <h3>User Details</h3>
+          <table class="table">
+            <tr>
+              <th>Name</th>
+              <td id="viewName"></td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td id="viewEmail"></td>
+            </tr>
+            <tr>
+              <th>Password</th>
+              <td id="viewPassword"></td>
+            </tr>
+          </table>
+          <button class="btn btn-secondary" onclick="goBackToTable()">Back to Table</button>
+        </div>
+
+        <!-- Edit User Section -->
+        <div id="editSection" class="form-container" style="display: none;">
+          <h3>Edit User</h3>
+          <form id="editForm">
+            <div class="mb-3">
+              <label for="editName" class="form-label">Name:</label>
+              <input type="text" class="form-control" id="editName" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="editEmail" class="form-label">Email:</label>
+              <input type="email" class="form-control" id="editEmail" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="editPassword" class="form-label">Password:</label>
+              <input type="password" class="form-control" id="editPassword" name="password" required>
+            </div>
+            <input type="hidden" id="editUserId" name="id">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-secondary" onclick="goBackToTable()">Cancel</button>
+          </form>
+        </div>
       </div>
     </div>
-
-
-    <!-- View User Details (Displays in a Table) -->
-    <div id="viewSection" class="mt-5" style="display:none;">
-      <h3>User Details</h3>
-      <table class="table">
-        <tr>
-          <th>Name</th>
-          <td id="viewName"></td>
-        </tr>
-        <tr>
-          <th>Email</th>
-          <td id="viewEmail"></td>
-        </tr>
-        <tr>
-          <th>Password</th>
-          <td id="viewPassword"></td>
-        </tr>
-      </table>
-      <button class="btn btn-secondary" onclick="goBackToTable()">Back to Table</button>
-    </div>
-
-
-    <div id="editSection" class="mt-5" style="display:none;">
-      <h3>Edit User</h3>
-      <form id="editForm">
-        <div class="mb-3">
-          <label for="editName" class="form-label">Name:</label>
-          <input type="text" class="form-control" id="editName" name="name" required>
-        </div>
-        <div class="mb-3">
-          <label for="editEmail" class="form-label">Email:</label>
-          <input type="email" class="form-control" id="editEmail" name="email" required>
-        </div>
-        <div class="mb-3">
-          <label for="editPassword" class="form-label">Password:</label>
-          <input type="password" class="form-control" id="editPassword" name="password" required>
-        </div>
-        <input type="hidden" id="editUserId" name="id">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <button type="button" class="btn btn-secondary" onclick="goBackToTable()">Cancel</button>
-      </form>
-    </div>
   </div>
-
-  <div id="createSection" style="margin-bottom: 20px;">
-  <h4>Create User</h4>
-  <form id="createForm">
-    <div class="mb-3">
-      <label>Name</label>
-      <input type="text" name="name" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Email</label>
-      <input type="email" name="email" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label>Password</label>
-      <input type="password" name="password" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Create User</button>
-  </form>
-</div>
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -223,6 +252,10 @@
   <script>
     // Fetch users on page load
     $(document).ready(function() {
+      fetchUsers();
+    });
+
+    function fetchUsers() {
       $.ajax({
         url: './../../models/User.php?action=fetch',
         type: 'GET',
@@ -242,7 +275,7 @@
                                 </td>
                             </tr>`;
             });
-            $('#userTable tbody').html(tableBody); // Insert the table rows
+            $('#userTable tbody').html(tableBody);
           } else {
             $('#userTable tbody').html('<tr><td colspan="4">No users found.</td></tr>');
           }
@@ -251,9 +284,9 @@
           console.error('AJAX request failed:', error);
         }
       });
-    });
+    }
 
-    // View user details in a table format
+    // View user details
     function viewUser(id) {
       $.ajax({
         url: './../../models/User.php?action=view&id=' + id,
@@ -264,8 +297,12 @@
             $('#viewName').text(data.response.name);
             $('#viewEmail').text(data.response.email);
             $('#viewPassword').text(data.response.password);
+            
+            // Show the view section and hide others
             $('#viewSection').show();
-            $('#userTable').hide(); // Hide the user table when viewing
+            $('#tableSection').hide();
+            $('#createSection').hide();
+            $('#editSection').hide();
           } else {
             alert(data.response);
           }
@@ -276,19 +313,20 @@
       });
     }
 
-    // Go back to the user table from the view section
+    // Go back to the user table
     function goBackToTable() {
       $('#viewSection').hide();
       $('#editSection').hide();
-      $('#userTable').show();
-      $('#createSection').show();
+      $('#createSection').hide();
+      $('#tableSection').show();
     }
 
+    // Show create form
     function showCreateForm() {
+      $('#createSection').show();
+      $('#tableSection').hide();
       $('#viewSection').hide();
       $('#editSection').hide();
-      $('#userTable').hide();
-      $('#createSection').show();
     }
 
     // Edit user details
@@ -303,8 +341,12 @@
             $('#editEmail').val(data.response.email);
             $('#editPassword').val(data.response.password);
             $('#editUserId').val(data.response.id);
+            
+            // Show the edit section and hide others
             $('#editSection').show();
-            $('#userTable').hide(); // Hide the user table when editing
+            $('#tableSection').hide();
+            $('#viewSection').hide();
+            $('#createSection').hide();
           } else {
             alert(data.response);
           }
@@ -326,8 +368,8 @@
         success: function(data) {
           alert(data.response);
           if (data.success) {
-            goBackToTable(); // Go back to table view after edit
-            location.reload(); // Reload the page to update the table
+            goBackToTable();
+            fetchUsers(); // Refresh the user list
           }
         },
         error: function(xhr, status, error) {
@@ -338,19 +380,15 @@
 
     // Delete user
     function deleteUser(id) {
-      const crudId = $(this).data('crud-id'); 
       if (confirm('Are you sure you want to delete this user?')) {
         $.ajax({
           url: './../../models/User.php?action=delete&id=' + id,
           type: 'GET',
-          data: {
-            crud_id: crudId,   
-          },
           dataType: 'json',
           success: function(data) {
             alert(data.response);
             if (data.success) {
-              $(`tr[data-crud-id="${crud_id}"]`).remove();x
+              fetchUsers(); // Refresh the user list
             }
           },
           error: function(xhr, status, error) {
@@ -360,12 +398,17 @@
       }
     }
 
-    $('#createForm').submit(function (e) {
+    // Handle create form submission
+    $('#createForm').submit(function(e) {
       e.preventDefault();
-      $.post('your_php_file.php?action=create', $(this).serialize(), function (res) {
-        alert("User created!");
-        $('#createForm')[0].reset();
-        fetchUsers();
+      $.post('./../../models/User.php?action=create', $(this).serialize(), function(data) {
+        if (data.success) {
+          $('#createForm')[0].reset();
+          goBackToTable();
+          fetchUsers(); // Refresh the user list
+        }
+      }, 'json').fail(function(xhr, status, error) {
+        console.error('Error creating user:', error);
       });
     });
 
@@ -375,14 +418,9 @@
     }
 
     function setActive(element) {
-      // Remove active class from all links
       document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
-      // Add active class to the clicked link
       element.classList.add('active');
     }
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

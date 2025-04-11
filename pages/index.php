@@ -5,7 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
+
   <title>TechCare - Computer Servicing</title>
+  <link rel="icon" type="image/png" href="/icon.png">
+
 </head>
 
 <body>
@@ -53,7 +56,7 @@
 
         <div class="col-md-6 text-center order-1 order-md-2 mb-4 mb-md-0 position-relative">
           <div class="position-relative d-inline-block" style="width: 400px; height: 400px;">
-            <img src="./8.svg" alt="Illustration" class="img-fluid w-100" style="max-width: 500px;" />
+            <img src="./../assets/8.svg" alt="Illustration" class="img-fluid w-100" style="max-width: 500px;" />
           </div>
         </div>
 
@@ -65,7 +68,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6 text-center mb-4 mb-md-0">
-          <img src="./img-80.jpg" alt="Illustration" class="img-fluid" style="max-width: 400px;">
+          <img src="../assets/img-80.jpg" alt="Illustration" class="img-fluid" style="max-width: 400px;">
         </div>
 
         <div class="col-md-6">
@@ -131,7 +134,7 @@
         </div>
 
         <div class="col-md-6 text-center order-1 order-md-2 mb-4 mb-md-0">
-          <img src="./img-80.jpg" alt="About Illustration" class="img-fluid" style="max-width: 400px;">
+          <img src="./../assets/8.svg" alt="About Illustration" class="img-fluid" style="max-width: 400px;">
         </div>
       </div>
     </div>
@@ -146,7 +149,7 @@
         <div class="col-md-4">
           <div class="card h-100 shadow-sm border-0 rounded-4">
             <div class="ratio ratio-16x9">
-              <img src="./free-photo-of-group-of-people-petting-a-dog.jpeg" class="card-img-top rounded-top-4"
+              <img src="./../assets/free-photo-of-group-of-people-petting-a-dog.jpeg" class="card-img-top rounded-top-4"
                 alt="Blog Image" />
             </div>
             <div class="card-body text-start">
@@ -160,7 +163,7 @@
         <div class="col-md-4">
           <div class="card h-100 shadow-sm border-0 rounded-4">
             <div class="ratio ratio-16x9">
-              <img src="./pexels-photo-636243.jpeg" class="card-img-top rounded-top-4" alt="Blog Image" />
+              <img src="./../assets/pexels-photo-636243.jpeg" class="card-img-top rounded-top-4" alt="Blog Image" />
             </div>
             <div class="card-body text-start">
               <span class="badge bg-light text-primary mb-2">Security</span>
@@ -173,7 +176,7 @@
         <div class="col-md-4">
           <div class="card h-100 shadow-sm border-0 rounded-4">
             <div class="ratio ratio-16x9">
-              <img src="./pexels-pixabay-270637.jpg" class="card-img-top rounded-top-4" alt="Blog Image" />
+              <img src="./../assets/pexels-pixabay-270637.jpg" class="card-img-top rounded-top-4" alt="Blog Image" />
             </div>
             <div class="card-body text-start">
               <span class="badge bg-light text-primary mb-2">Hardware</span>

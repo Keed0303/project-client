@@ -12,33 +12,34 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
-    <div class="container-md">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
-        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <a class="navbar-brand fw-bold" href="#">TechCare</a>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Contact</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <a class="btn btn-outline-light" href="./login.php">Login</a>
-        </form>
-      </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+  <div class="container-md">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand fw-bold" href="#home">TechCare</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#services">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact">Contact</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <a class="btn btn-outline-light" href="./login.php">Login</a>
+      </form>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <section class="py-5 bg-light">
+  <section id="home" class="py-5 bg-light">
     <div class="container">
       <div class="row align-items-center">
 
@@ -64,7 +65,7 @@
     </div>
   </section>
 
-  <section class="py-5" style="background-color: #dceeff;">
+  <section id="services" class="py-5" style="background-color: #dceeff;">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6 text-center mb-4 mb-md-0">
@@ -192,7 +193,31 @@
       </div>
     </div>
   </section>
-
+  <footer id="contact" class="bg-primary text-white py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <h5 class="fw-bold">Contact Us</h5>
+        <p class="mb-1"><strong>TechCare Computer Services</strong></p>
+        <p class="mb-1">123 Service Lane, Quezon City, Philippines</p>
+        <p class="mb-1">Phone: (02) 1234 5678</p>
+        <p class="mb-1">Mobile: +63 912 345 6789</p>
+        <p>Email: <a href="mailto:support@techcare.ph" class="text-white text-decoration-underline">support@techcare.ph</a></p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <h5 class="fw-bold">Follow Us</h5>
+        <p>
+          <a href="#" class="text-white me-3 text-decoration-none">Facebook</a>
+          <a href="#" class="text-white me-3 text-decoration-none">Twitter</a>
+          <a href="#" class="text-white text-decoration-none">Instagram</a>
+        </p>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <small>&copy; 2025 TechCare. All rights reserved.</small>
+    </div>
+  </div>
+</footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
